@@ -4,19 +4,19 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  build:
+  sonar:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
       - name: Install dependencies
         working-directory: gym_frontend/client
@@ -30,8 +30,9 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         with:
           projectBaseDir: gym_frontend/client
+          args: >
+            -Dsonar.projectKey=Thirupathi-17_gym_frontend
+            -Dsonar.organization=thirupathi-17
+            -Dsonar.host.url=https://sonarcloud.io
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: Thirupathi-17_gym_frontend
-          SONAR_ORGANIZATION: thirupathi-17
-
