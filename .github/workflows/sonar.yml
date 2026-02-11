@@ -8,10 +8,12 @@ on:
 
 jobs:
   sonar:
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -29,8 +31,11 @@ jobs:
           npm run build
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5
         with:
           projectBaseDir: gym_frontend/client
+          args: >
+            -Dsonar.projectKey=Thirupathi-17_gym_frontend
+            -Dsonar.organization=thirupathi-17
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
