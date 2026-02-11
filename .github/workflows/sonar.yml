@@ -8,24 +8,31 @@ on:
 
 jobs:
   sonar:
+    name: SonarCloud Analysis (Frontend)
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # 1️⃣ Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         working-directory: gym_frontend/client
         run: npm install
 
+      # 4️⃣ Build project
       - name: Build project
         working-directory: gym_frontend/client
         run: npm run build
 
+      # 5️⃣ SonarCloud Analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         with:
@@ -33,6 +40,6 @@ jobs:
           args: >
             -Dsonar.projectKey=Thirupathi-17_gym_frontend
             -Dsonar.organization=thirupathi-17
-            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.coverage.exclusions=**
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
